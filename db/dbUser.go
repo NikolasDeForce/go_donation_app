@@ -66,7 +66,7 @@ func InsertUser(u User) bool {
 		return false
 	}
 
-	stmt, err := db.Prepare("INSERT INTO user_registed(Nickname, Mail, Token) values($1, $2, $3)")
+	stmt, err := db.Prepare("INSERT INTO user_registed(Login, Mail, Token) values($1, $2, $3)")
 	if err != nil {
 		log.Println("AddUser:", err)
 		return false
@@ -115,7 +115,7 @@ func FindUserNickname(nickname, password string) User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM user_registed WHERE Nickname, Password = $1, $2\n", nickname, password)
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Login, Password = $1, $2\n", nickname, password)
 	if err != nil {
 		log.Println("Query:", err)
 		return User{}
@@ -147,7 +147,7 @@ func IsUserValid(u User) bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM user_registed WHERE Nickname = $1 \n", u.Login)
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Login = $1 \n", u.Login)
 	if err != nil {
 		log.Println(err)
 		return false

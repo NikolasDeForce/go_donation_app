@@ -25,11 +25,11 @@ func InsertDonate(d Donate) bool {
 	defer db.Close()
 
 	if IsDonateValid(d) {
-		log.Println("Donate", d.Text, "already exist!")
+		log.Println("Donate", d.NameSub, "already exist!")
 		return false
 	}
 
-	stmt, err := db.Prepare("INSERT INTO donation_list(LoginStrimer, NameSub, Value, Text) values($1, $2, $3, $4)")
+	stmt, err := db.Prepare("INSERT INTO donation_list(LoginStrimer, NameSub, Val, Text) values($1, $2, $3, $4)")
 	if err != nil {
 		log.Println("AddDonate:", err)
 		return false
@@ -77,7 +77,7 @@ func IsDonateValid(d Donate) bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM donation_list WHERE LoginStrimer, NameSub, Value, Text = $1, $2, $3, $4 \n", d.LoginStrimer, d.NameSub, d.Value, d.Text)
+	rows, err := db.Query("SELECT * FROM donation_list WHERE NameSub = $1 \n", d.NameSub)
 	if err != nil {
 		log.Println(err)
 		return false

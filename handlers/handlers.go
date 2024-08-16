@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 type NotAllowedHandler struct{}
@@ -34,12 +35,12 @@ func init() {
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Main Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	w.WriteHeader(http.StatusOK)
-	// if r.URL.Path != "/" {
-	// 	http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
-	// 	return
-	// } else {
-	// 	w.WriteHeader(http.StatusOK)
-	// }
+	if r.URL.Path != "/" {
+		http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
+		return
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
 
 	err := tmpl.ExecuteTemplate(w, "index.html", nil)
 	if err != nil {
@@ -65,10 +66,33 @@ func DonationHanler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	w.WriteHeader(http.StatusOK)
 
+	if r.URL.Path != "/donation" {
+		http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
+		return
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
+
 	err := tmpl.ExecuteTemplate(w, "donation.html", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	d := db.Donate{}
+
+	r.ParseForm()
+
+	d.LoginStrimer = r.FormValue("loginStrimer")
+	d.NameSub = r.FormValue("userNickname")
+	d.Value, _ = strconv.Atoi(r.FormValue("Value"))
+	d.Text = r.FormValue("Text")
+
+	db.InsertDonate(db.Donate{
+		LoginStrimer: d.LoginStrimer,
+		NameSub:      d.NameSub,
+		Value:        d.Value,
+		Text:         d.Text,
+	})
 }
 
 // SliceToJSON encodes a slice with JSON records
