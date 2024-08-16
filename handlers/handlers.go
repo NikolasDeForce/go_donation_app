@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"donation/db"
 	generatetoken "donation/generateToken"
 	"encoding/json"
 	"fmt"
@@ -32,50 +33,42 @@ func init() {
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Main Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-	if r.URL.Path != "/" {
-		http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
-		return
-	} else {
-		w.WriteHeader(http.StatusOK)
-	}
+	w.WriteHeader(http.StatusOK)
+	// if r.URL.Path != "/" {
+	// 	http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
+	// 	return
+	// } else {
+	// 	w.WriteHeader(http.StatusOK)
+	// }
 
 	err := tmpl.ExecuteTemplate(w, "index.html", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// u := db.User{}
+	u := db.User{}
 
 	r.ParseForm()
 
-	nickname := r.FormValue("userNickname")
-	mail := r.FormValue("userEmail")
-	token := generatetoken.GenerateToken()
+	u.Login = r.FormValue("userNickname")
+	u.Mail = r.FormValue("userEmail")
+	u.Token = generatetoken.GenerateToken()
 
-	if nickname != "" && mail != "" {
-		http.Redirect(w, r, "/register", http.StatusPermanentRedirect)
-	}
-
-	log.Println(nickname)
-	log.Println(mail)
-	log.Println(token)
-
-	// db.InsertUser(db.User{
-	// 	Nickname: u.Nickname,
-	// 	Mail:     u.Mail,
-	// 	Token:    u.Token,
-	// })
+	db.InsertUser(db.User{
+		Login: u.Login,
+		Mail:  u.Mail,
+		Token: u.Token,
+	})
 }
 
-func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("Register Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
+func DonationHanler(w http.ResponseWriter, r *http.Request) {
+	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	w.WriteHeader(http.StatusOK)
 
-	err := tmpl.ExecuteTemplate(w, "register.html", nil)
+	err := tmpl.ExecuteTemplate(w, "donation.html", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
-
 }
 
 // SliceToJSON encodes a slice with JSON records

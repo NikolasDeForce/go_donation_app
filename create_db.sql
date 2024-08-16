@@ -6,7 +6,7 @@ CREATE DATABASE donation_rest;
 CREATE TABLE user_registed (
     id SERIAL PRIMARY KEY,
     login VARCHAR NOT NULL,
-    password VARCHAR NOT NULL,
+    mail VARCHAR NOT NULL,
     token VARCHAR NOT NULL
 );
 

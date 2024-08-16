@@ -29,7 +29,7 @@ func InsertDonate(d Donate) bool {
 		return false
 	}
 
-	stmt, err := db.Prepare("INSERT INTO user_registed(LoginStrimer, NameSub, Value, Text) values($1, $2, $3, $4)")
+	stmt, err := db.Prepare("INSERT INTO donation_list(LoginStrimer, NameSub, Value, Text) values($1, $2, $3, $4)")
 	if err != nil {
 		log.Println("AddDonate:", err)
 		return false

@@ -11,10 +11,10 @@ import (
 )
 
 type User struct {
-	ID       int
-	Nickname string
-	Mail     string
-	Token    string
+	ID    int
+	Login string
+	Mail  string
+	Token string
 }
 
 // FromJSON decodes a serialized JSON record - User{}
@@ -62,7 +62,7 @@ func InsertUser(u User) bool {
 	defer db.Close()
 
 	if IsUserValid(u) {
-		log.Println("User", u.Nickname, "already exist!")
+		log.Println("User", u.Login, "already exist!")
 		return false
 	}
 
@@ -72,7 +72,7 @@ func InsertUser(u User) bool {
 		return false
 	}
 
-	stmt.Exec(u.Nickname, u.Mail, u.Token)
+	stmt.Exec(u.Login, u.Mail, u.Token)
 	return true
 }
 
@@ -105,8 +105,8 @@ func ListAllMessages() []User {
 	return all
 }
 
-// Same as on top, returns message record by text
-func FindUserNickname(nickname string) User {
+// Same as on top, returns user record by name
+func FindUserNickname(nickname, password string) User {
 	db := ConnectPostgres()
 	if db == nil {
 		log.Println("Cannot connect to PostreSQL!")
@@ -115,7 +115,7 @@ func FindUserNickname(nickname string) User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM user_registed WHERE Nickname = $1\n", nickname)
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Nickname, Password = $1, $2\n", nickname, password)
 	if err != nil {
 		log.Println("Query:", err)
 		return User{}
@@ -147,7 +147,7 @@ func IsUserValid(u User) bool {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM user_registed WHERE Nickname = $1 \n", u.Nickname)
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Nickname = $1 \n", u.Login)
 	if err != nil {
 		log.Println(err)
 		return false
@@ -165,7 +165,7 @@ func IsUserValid(u User) bool {
 		}
 		temp = User{c1, c2, c3, c4}
 	}
-	if u.Nickname == temp.Nickname {
+	if u.Login == temp.Login {
 		return true
 	}
 	return false

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>DonateON</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="HTML5 website template">
+  <meta name="keywords" content="global, template, html, sass, jquery">
+  <meta name="author" content="Bucky Maler">
+  <link rel="stylesheet" href="static/assets/css/main.css">
+</head>
+<body>
+
+<!-- notification for small viewports and landscape oriented smartphones -->
+<div class="device-notification">
+  <a class="device-notification--logo" href="#0">
+    <img src="static/assets/img/logo.png" alt="Global">
+    <p>DonateON</p>
+  </a>
+  <p class="device-notification--message">DonateON – the streamer's most important tool</p>
+</div>
+
+<div class="perspective effect-rotate-left">
+  <div class="container"><div class="outer-nav--return"></div>
+    <div id="viewport" class="l-viewport">
+      <div class="l-wrapper">
+        <header class="header">
+          <a class="header--logo" href="http://localhost:8010/donation">
+            <img src="static/assets/img/logo.png" alt="Global">
+            <p>DonateON</p>
+          </a>
+          <button class="header--cta cta">Регистрация</button>
+          <div class="header--nav-toggle">
+            <span></span>
+          </div>
+        </header>
+        <nav class="l-side-nav">
+          <ul class="side-nav">
+            <li class="is-active"><span>Пожертвование</span></li>
+          </ul>
+        </nav>
+        <ul class="l-main-content main-content">
+          <li class="l-section section section--is-active">
+            <div class="hire">
+              <form class="work-request">
+                <h2>Укажите данные о себе и стримере</h2>
+                <div class="work-request--information">
+                  <div class="information-name">
+                    <input name="userNickname" type="text" spellcheck="false">
+                    <label for="nickname">Ваше имя</label>
+                  </div>
+                  <div class="information-email">
+                    <input name="userEmail" type="email" spellcheck="false">
+                    <label for="email">Логин стримера</label>
+                  </div>
+                </div>
+              </form>
+              <form class="work-request">
+                <h2>Укажите сумму и сообщение для стримера</h2>
+                <div class="work-request--information">
+                  <div class="information-name">
+                    <input name="Value" type="text" spellcheck="false">
+                    <label for="nickname">Сумма</label>
+                  </div>
+                  <div class="information-email">
+                    <input name="Text" type="email" spellcheck="false">
+                    <label for="email">Сообщение</label>
+                  </div>
+                </div>
+              </form>
+              <form class="work-request">
+                <h2>Укажите данные карты</h2>
+                <div class="work-request--information">
+                  <div class="information-name">
+                    <input name="Card" type="text" spellcheck="false">
+                    <label for="nickname">Номер карты</label>
+                  </div>
+                  <div class="information-email">
+                    <input name="CVC" type="email" spellcheck="false">
+                    <label for="email">CVC-Код</label>
+                  </div>
+                </div>
+                <input type="submit" value="Отправить">
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <ul class="outer-nav">
+    <li class="is-active">Пожертвование</li>
+  </ul>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="static/assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
+<script src="static/assets/js/functions-min.js"></script>
+</body>
+</html>
