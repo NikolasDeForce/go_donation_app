@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	generatetoken "donation/generateToken"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -31,12 +32,50 @@ func init() {
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Main Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-	w.WriteHeader(http.StatusOK)
+	if r.URL.Path != "/" {
+		http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
+		return
+	} else {
+		w.WriteHeader(http.StatusOK)
+	}
 
 	err := tmpl.ExecuteTemplate(w, "index.html", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// u := db.User{}
+
+	r.ParseForm()
+
+	nickname := r.FormValue("userNickname")
+	mail := r.FormValue("userEmail")
+	token := generatetoken.GenerateToken()
+
+	if nickname != "" && mail != "" {
+		http.Redirect(w, r, "/register", http.StatusPermanentRedirect)
+	}
+
+	log.Println(nickname)
+	log.Println(mail)
+	log.Println(token)
+
+	// db.InsertUser(db.User{
+	// 	Nickname: u.Nickname,
+	// 	Mail:     u.Mail,
+	// 	Token:    u.Token,
+	// })
+}
+
+func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("Register Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
+	w.WriteHeader(http.StatusOK)
+
+	err := tmpl.ExecuteTemplate(w, "register.html", nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 }
 
 // SliceToJSON encodes a slice with JSON records

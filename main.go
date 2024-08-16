@@ -23,9 +23,8 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static", fs))
 	mux.Handle("/", http.HandlerFunc(handlers.MainHandler))
 
-	// mux.Handle("/menjeans/static/", http.StripPrefix("/static", fs))
-	// mux.Handle("/men", http.HandlerFunc(handlers.MenJeansHandler))
-	// mux.Handle("/women", http.HandlerFunc(handlers.WomenJeansHandler))
+	mux.Handle("/register/static/", http.StripPrefix("/static", fs))
+	mux.Handle("/register", http.HandlerFunc(handlers.RegisterHandler))
 
 	s := &http.Server{
 		Addr:         port,

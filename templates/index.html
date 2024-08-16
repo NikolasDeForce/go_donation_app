@@ -26,7 +26,7 @@
     <div id="viewport" class="l-viewport">
       <div class="l-wrapper">
         <header class="header">
-          <a class="header--logo" href="#0">
+          <a class="header--logo" href="http://localhost:8010/">
             <img src="static/assets/img/logo.png" alt="Global">
             <p>DonateON</p>
           </a>
@@ -60,15 +60,15 @@
                 <img src="static/assets/img/work-donat.png" alt="Welcome">
               </div>
               <div class="intro--options">
-                <a href="#0">
+                <a href="">
                   <h3>Удобный способ получения донатов</h3>
                   <p>Получайте финансовые вознаграждения от зрителей и отображайте их на своих трансляциях.</p>
                 </a>
-                <a href="#0">
+                <a href="">
                   <h3>Удобный и быстрый вывод средств</h3>
                   <p>Мы предлагаем широкий выбор способов оплаты для вашей аудитории, а вам гарантируем безопасный вывод заработанных средств.</p>
                 </a>
-                <a href="#0">
+                <a href="">
                   <h3>Сбор статистики и получение отчетностей через API</h3>
                   <p>Через запросы API вы можете получить статистику по вашим донатам, сообщениям и тд.</p>
                 </a>
@@ -101,15 +101,16 @@
           </li>
           <li class="l-section section">
             <div class="hire">
-              <h2>Укажите свой стримерский никнейм и почту</h2>
+              <form class="work-request">
+                <h2>Укажите свой логин и пароль</h2>
                 <div class="work-request--information">
                   <div class="information-name">
-                    <input id="name" type="text" spellcheck="false">
-                    <label for="name">Никнейм</label>
+                    <input name="userNickname" type="text" spellcheck="false">
+                    <label for="nickname">Логин</label>
                   </div>
                   <div class="information-email">
-                    <input id="email" type="email" spellcheck="false">
-                    <label for="email">Почта</label>
+                    <input name="userEmail" type="email" spellcheck="false">
+                    <label for="email">Пароль</label>
                   </div>
                 </div>
                 <input type="submit" value="Отправить">
