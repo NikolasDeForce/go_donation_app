@@ -7,11 +7,13 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 var port = ":8010"
 
-var mux = http.NewServeMux()
+var rMux = mux.NewRouter()
 
 func main() {
 	arguments := os.Args
@@ -19,21 +21,32 @@ func main() {
 		port = ":" + arguments[1]
 	}
 
-	mux.Handle("/error", http.HandlerFunc(handlers.MethodNotAllowedHandler))
+	rMux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
-	fs := http.FileServer(http.Dir("static"))
-	mux.Handle("/static/", http.StripPrefix("/static", fs))
-	mux.Handle("/", http.HandlerFunc(handlers.MainHandler))
+	getMux := rMux.Methods(http.MethodGet).Subrouter()
 
-	mux.Handle("/register/static/", http.StripPrefix("/static", fs))
-	mux.Handle("/register", http.HandlerFunc(handlers.RegisterHandler))
+	getMux.HandleFunc("/", handlers.MainHandler)
+	getMux.HandleFunc("/donation", handlers.DonationHanler)
+	getMux.HandleFunc("/register", handlers.RegisterHandler)
 
-	mux.Handle("/donation/static/", http.StripPrefix("/static", fs))
-	mux.Handle("/donation", http.HandlerFunc(handlers.DonationHanler))
+	//API
+	getMux.HandleFunc("/api/{token}/donates", handlers.GetDonatesHandler)
+
+	// mux.Handle("/error", http.HandlerFunc(handlers.MethodNotAllowedHandler))
+
+	// fs := http.FileServer(http.Dir("static"))
+	// mux.Handle("/static/", http.StripPrefix("/static", fs))
+	// mux.Handle("/", http.HandlerFunc(handlers.MainHandler))
+
+	// mux.Handle("/register/static/", http.StripPrefix("/static", fs))
+	// mux.Handle("/register", http.HandlerFunc(handlers.RegisterHandler))
+
+	// mux.Handle("/donation/static/", http.StripPrefix("/static", fs))
+	// mux.Handle("/donation", http.HandlerFunc(handlers.DonationHanler))
 
 	s := &http.Server{
 		Addr:         port,
-		Handler:      mux,
+		Handler:      rMux,
 		IdleTimeout:  10 * time.Second,
 		ReadTimeout:  time.Second,
 		WriteTimeout: time.Second,

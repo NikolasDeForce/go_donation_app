@@ -19,15 +19,15 @@ type User struct {
 }
 
 // FromJSON decodes a serialized JSON record - User{}
-func (m *User) FromJSON(r io.Reader) error {
+func (u *User) FromJSON(r io.Reader) error {
 	e := json.NewDecoder(r)
-	return e.Decode(m)
+	return e.Decode(u)
 }
 
 // ToJSON encodes a User JSON record
-func (m *User) ToJSON(w io.Writer) error {
+func (u *User) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
-	return e.Encode(m)
+	return e.Encode(u)
 }
 
 // PostgreSQL connection details
@@ -137,6 +137,38 @@ func FindUserNicknameAndPassword(password string) User {
 	}
 
 	return u
+}
+
+// FindUserToken if for returning a user record defined by token
+func FindUserToken(token string) User {
+	db := ConnectPostgres()
+	if db == nil {
+		log.Println("Cannot connect to PostreSQL!")
+		db.Close()
+		return User{}
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Token = $1\n", token)
+	if err != nil {
+		log.Println("Query:", err)
+		return User{}
+	}
+	defer rows.Close()
+
+	var c1 int
+	var c2, c3, c4, c5 string
+
+	for rows.Next() {
+		err := rows.Scan(&c1, &c2, &c3, &c4, &c5)
+		if err != nil {
+			log.Println(err)
+			return User{}
+		}
+		u := User{c1, c2, c3, c4, c5}
+		log.Println("Found user:", u)
+	}
+	return User{c1, c2, c3, c4, c5}
 }
 
 func IsUserValid(u User) bool {

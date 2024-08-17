@@ -40,7 +40,7 @@ func InsertDonate(d Donate) bool {
 }
 
 // ListAllMessages if for returning all messages from the database table
-func ListAllDonates() []Donate {
+func ListAllDonates(loginStrimer string) []Donate {
 	db := ConnectPostgres()
 	if db == nil {
 		log.Println("Cannot connect to PostreSQL!")
@@ -49,7 +49,7 @@ func ListAllDonates() []Donate {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM donation_list \n")
+	rows, err := db.Query("SELECT * FROM donation_list WHERE LoginStrimer = $1 \n", loginStrimer)
 	if err != nil {
 		log.Println(err)
 		return []Donate{}

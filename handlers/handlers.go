@@ -10,6 +10,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type NotAllowedHandler struct{}
@@ -106,6 +108,31 @@ func DonationHanler(w http.ResponseWriter, r *http.Request) {
 		Value:        d.Value,
 		Text:         d.Text,
 	})
+}
+
+// API handlers
+func GetDonatesHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("GetDonatesHandler Serving:", r.URL.Path, "from", r.Host)
+
+	token, ok := mux.Vars(r)["token"]
+	if !ok {
+		log.Println("token value not set!")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	t := db.FindUserToken(token)
+	if t.Token == token {
+		err := db.ListAllDonates(t.Login)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			log.Println(err)
+		}
+		return
+	}
+
+	log.Println("Token not found:", token)
+	w.WriteHeader(http.StatusBadRequest)
 }
 
 // SliceToJSON encodes a slice with JSON records
