@@ -32,7 +32,7 @@ func main() {
 	getMux.HandleFunc("/donation", handlers.DonationHanler)
 
 	//API
-	getMux.HandleFunc("/register/{login}/{password}", handlers.GetTokenHandler)
+	getMux.HandleFunc("/api/{login}/{password}/mytoken", handlers.GetTokenHandler)
 	getMux.HandleFunc("/api/{token}/donates", handlers.GetDonatesHandler)
 
 	s := &http.Server{
