@@ -21,6 +21,9 @@ func main() {
 		port = ":" + arguments[1]
 	}
 
+	NotAllowed := handlers.NotAllowedHandler{}
+	rMux.MethodNotAllowedHandler = NotAllowed
+
 	rMux.PathPrefix("/static/").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 
 	getMux := rMux.Methods(http.MethodGet).Subrouter()
@@ -31,18 +34,6 @@ func main() {
 	//API
 	getMux.HandleFunc("/register/{login}/{password}", handlers.GetTokenHandler)
 	getMux.HandleFunc("/api/{token}/donates", handlers.GetDonatesHandler)
-
-	// mux.Handle("/error", http.HandlerFunc(handlers.MethodNotAllowedHandler))
-
-	// fs := http.FileServer(http.Dir("static"))
-	// mux.Handle("/static/", http.StripPrefix("/static", fs))
-	// mux.Handle("/", http.HandlerFunc(handlers.MainHandler))
-
-	// mux.Handle("/register/static/", http.StripPrefix("/static", fs))
-	// mux.Handle("/register", http.HandlerFunc(handlers.RegisterHandler))
-
-	// mux.Handle("/donation/static/", http.StripPrefix("/static", fs))
-	// mux.Handle("/donation", http.HandlerFunc(handlers.DonationHanler))
 
 	s := &http.Server{
 		Addr:         port,
