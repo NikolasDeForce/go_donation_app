@@ -19,6 +19,8 @@ func main() {
 		port = ":" + arguments[1]
 	}
 
+	mux.Handle("/error", http.HandlerFunc(handlers.MethodNotAllowedHandler))
+
 	fs := http.FileServer(http.Dir("static"))
 	mux.Handle("/static/", http.StripPrefix("/static", fs))
 	mux.Handle("/", http.HandlerFunc(handlers.MainHandler))

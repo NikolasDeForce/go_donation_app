@@ -102,7 +102,7 @@
           <li class="l-section section">
             <div class="hire">
               <form class="work-request">
-                <h2>Укажите свой логин и пароль</h2>
+                <h2>Придумайте логин и укажите почту</h2>
                 <div class="work-request--information">
                   <div class="information-name">
                     <input name="userNickname" type="text" spellcheck="false">
@@ -113,7 +113,20 @@
                     <label for="email">Почта</label>
                   </div>
                 </div>
-                <input type="submit" value="Отправить">
+                <h2>Придумайте пароль и повторите его снова</h2>
+                <div class="work-request--information">
+                  <div class="information-name">
+                    <input name="userPassword" type="password" required minlength="8" spellcheck="false">
+                    <label for="password">Пароль</label>
+                  </div>
+                  <div class="information-email">
+                    <input name="userPasswordAgain" type="password" required minlength="8" spellcheck="false">
+                    <label for="password">Повторите пароль</label>
+                  </div>
+                </div>
+                <a href="http://localhost:8010/register">
+                  <input type="button" value="Отправить">
+                </a>
               </form>
             </div>
           </li>

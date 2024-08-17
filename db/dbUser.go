@@ -11,10 +11,11 @@ import (
 )
 
 type User struct {
-	ID    int
-	Login string
-	Mail  string
-	Token string
+	ID       int
+	Login    string
+	Mail     string
+	Password string
+	Token    string
 }
 
 // FromJSON decodes a serialized JSON record - User{}
@@ -94,11 +95,11 @@ func ListAllMessages() []User {
 
 	all := []User{}
 	var c1 int
-	var c2, c3, c4 string
+	var c2, c3, c4, c5 string
 
 	for rows.Next() {
-		err = rows.Scan(&c1, &c2, &c3, &c4)
-		temp := User{c1, c2, c3, c4}
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5)
+		temp := User{c1, c2, c3, c4, c5}
 		all = append(all, temp)
 	}
 
@@ -106,7 +107,7 @@ func ListAllMessages() []User {
 }
 
 // Same as on top, returns user record by name
-func FindUserNickname(nickname, password string) User {
+func FindUserNicknameAndPassword(nickname, password string) User {
 	db := ConnectPostgres()
 	if db == nil {
 		log.Println("Cannot connect to PostreSQL!")
@@ -124,15 +125,15 @@ func FindUserNickname(nickname, password string) User {
 
 	u := User{}
 	var c1 int
-	var c2, c3, c4 string
+	var c2, c3, c4, c5 string
 
 	for rows.Next() {
-		err := rows.Scan(&c1, &c2, &c3, &c4)
+		err := rows.Scan(&c1, &c2, &c3, &c4, &c5)
 		if err != nil {
 			log.Println(err)
 			return User{}
 		}
-		u = User{c1, c2, c3, c4}
+		u = User{c1, c2, c3, c4, c5}
 	}
 
 	return u
@@ -155,15 +156,15 @@ func IsUserValid(u User) bool {
 
 	temp := User{}
 	var c1 int
-	var c2, c3, c4 string
+	var c2, c3, c4, c5 string
 
 	for rows.Next() {
-		err = rows.Scan(&c1, &c2, &c3, &c4)
+		err = rows.Scan(&c1, &c2, &c3, &c4, &c5)
 		if err != nil {
 			log.Println(err)
 			return false
 		}
-		temp = User{c1, c2, c3, c4}
+		temp = User{c1, c2, c3, c4, c5}
 	}
 	if u.Login == temp.Login {
 		return true

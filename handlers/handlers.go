@@ -16,6 +16,8 @@ type NotAllowedHandler struct{}
 
 var tmpl *template.Template
 
+var u db.User
+
 // ServeHTTP implements http.Handler.
 func (h NotAllowedHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	MethodNotAllowedHandler(w, r)
@@ -34,9 +36,8 @@ func init() {
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Main Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-	w.WriteHeader(http.StatusOK)
 	if r.URL.Path != "/" {
-		http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
+		http.Redirect(w, r, "/error", http.StatusMethodNotAllowed)
 		return
 	} else {
 		w.WriteHeader(http.StatusOK)
@@ -47,27 +48,40 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	u := db.User{}
-
 	r.ParseForm()
 
 	u.Login = r.FormValue("userNickname")
 	u.Mail = r.FormValue("userEmail")
+	u.Password = r.FormValue("userPassword")
 	u.Token = generatetoken.GenerateToken()
 
 	db.InsertUser(db.User{
-		Login: u.Login,
-		Mail:  u.Mail,
-		Token: u.Token,
+		Login:    u.Login,
+		Mail:     u.Mail,
+		Password: u.Password,
+		Token:    u.Token,
 	})
+}
+
+func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
+	w.WriteHeader(http.StatusOK)
+
+	nickname := u.Login
+	password := u.Password
+	user := db.FindUserNicknameAndPassword(nickname, password)
+
+	err := tmpl.ExecuteTemplate(w, "register.html", user)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func DonationHanler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-	w.WriteHeader(http.StatusOK)
 
 	if r.URL.Path != "/donation" {
-		http.Error(w, "Error: NOT FOUND", http.StatusNotFound)
+		http.Redirect(w, r, "/error", http.StatusMethodNotAllowed)
 		return
 	} else {
 		w.WriteHeader(http.StatusOK)
