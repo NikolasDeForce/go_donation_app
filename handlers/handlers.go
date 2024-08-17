@@ -65,19 +65,6 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-	w.WriteHeader(http.StatusOK)
-
-	password := u.Password
-	user := db.FindUserNicknameAndPassword(password)
-
-	err := tmpl.ExecuteTemplate(w, "register.html", user)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
 func DonationHanler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 
@@ -111,6 +98,32 @@ func DonationHanler(w http.ResponseWriter, r *http.Request) {
 }
 
 // API handlers
+func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
+
+	login, ok := mux.Vars(r)["login"]
+	if !ok {
+		log.Println("login value not set!")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	password, ok := mux.Vars(r)["password"]
+	if !ok {
+		log.Println("login value not set!")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	l := db.FindUserNickname(login)
+
+	if login == l.Login && password == l.Password {
+		fmt.Fprintf(w, "Привет %v\nТвой токен - %v\nСохраните его в безопасное место\nВ случае утери обращайтесь в тех.поддержку", l.Login, l.Token)
+		w.WriteHeader(http.StatusOK)
+	} else {
+		http.Error(w, "ERROR STATUS NOT FOUND", http.StatusNotFound)
+	}
+}
+
 func GetDonatesHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("GetDonatesHandler Serving:", r.URL.Path, "from", r.Host)
 
@@ -128,11 +141,14 @@ func GetDonatesHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			log.Println(err)
 		}
-		return
+		for _, v := range err {
+			fmt.Fprintf(w, "ID Доната: %v\nЛогин зрителя: %v\nЛогин стримера: %v\nСумма доната: %v\nСообщение: %v\n\n", v.ID, v.NameSub, v.LoginStrimer, v.Value, v.Text)
+		}
+		w.WriteHeader(http.StatusOK)
+	} else {
+		http.Error(w, "ERROR STATUS NOT FOUND", http.StatusNotFound)
+		log.Println("Token not found:", token)
 	}
-
-	log.Println("Token not found:", token)
-	w.WriteHeader(http.StatusBadRequest)
 }
 
 // SliceToJSON encodes a slice with JSON records

@@ -21,15 +21,15 @@ func main() {
 		port = ":" + arguments[1]
 	}
 
-	rMux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+	rMux.PathPrefix("/static/").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 
 	getMux := rMux.Methods(http.MethodGet).Subrouter()
 
 	getMux.HandleFunc("/", handlers.MainHandler)
 	getMux.HandleFunc("/donation", handlers.DonationHanler)
-	getMux.HandleFunc("/register", handlers.RegisterHandler)
 
 	//API
+	getMux.HandleFunc("/register/{login}/{password}", handlers.GetTokenHandler)
 	getMux.HandleFunc("/api/{token}/donates", handlers.GetDonatesHandler)
 
 	// mux.Handle("/error", http.HandlerFunc(handlers.MethodNotAllowedHandler))

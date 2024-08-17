@@ -107,7 +107,40 @@ func ListAllMessages() []User {
 }
 
 // Same as on top, returns user record by name
-func FindUserNicknameAndPassword(password string) User {
+func FindUserNickname(nickname string) User {
+	db := ConnectPostgres()
+	if db == nil {
+		log.Println("Cannot connect to PostreSQL!")
+		db.Close()
+		return User{}
+	}
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Login = $1 \n", nickname)
+	if err != nil {
+		log.Println("Query:", err)
+		return User{}
+	}
+	defer rows.Close()
+
+	u := User{}
+	var c1 int
+	var c2, c3, c4, c5 string
+
+	for rows.Next() {
+		err := rows.Scan(&c1, &c2, &c3, &c4, &c5)
+		if err != nil {
+			log.Println(err)
+			return User{}
+		}
+		u = User{c1, c2, c3, c4, c5}
+	}
+
+	return u
+}
+
+// Same as on top, returns user record by name
+func FindUserPassword(password string) User {
 	db := ConnectPostgres()
 	if db == nil {
 		log.Println("Cannot connect to PostreSQL!")
