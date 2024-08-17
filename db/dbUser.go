@@ -67,13 +67,13 @@ func InsertUser(u User) bool {
 		return false
 	}
 
-	stmt, err := db.Prepare("INSERT INTO user_registed(Login, Mail, Token) values($1, $2, $3)")
+	stmt, err := db.Prepare("INSERT INTO user_registed(Login, Mail, Password, Token) values($1, $2, $3, $4)")
 	if err != nil {
 		log.Println("AddUser:", err)
 		return false
 	}
 
-	stmt.Exec(u.Login, u.Mail, u.Token)
+	stmt.Exec(u.Login, u.Mail, u.Password, u.Token)
 	return true
 }
 
@@ -107,7 +107,7 @@ func ListAllMessages() []User {
 }
 
 // Same as on top, returns user record by name
-func FindUserNicknameAndPassword(nickname, password string) User {
+func FindUserNicknameAndPassword(password string) User {
 	db := ConnectPostgres()
 	if db == nil {
 		log.Println("Cannot connect to PostreSQL!")
@@ -116,7 +116,7 @@ func FindUserNicknameAndPassword(nickname, password string) User {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT * FROM user_registed WHERE Login, Password = $1, $2\n", nickname, password)
+	rows, err := db.Query("SELECT * FROM user_registed WHERE Password = $1 \n", password)
 	if err != nil {
 		log.Println("Query:", err)
 		return User{}

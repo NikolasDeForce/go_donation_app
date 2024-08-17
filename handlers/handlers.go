@@ -67,9 +67,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 	w.WriteHeader(http.StatusOK)
 
-	nickname := u.Login
 	password := u.Password
-	user := db.FindUserNicknameAndPassword(nickname, password)
+	user := db.FindUserNicknameAndPassword(password)
 
 	err := tmpl.ExecuteTemplate(w, "register.html", user)
 	if err != nil {

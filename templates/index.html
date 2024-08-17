@@ -116,16 +116,17 @@
                 <h2>Придумайте пароль и повторите его снова</h2>
                 <div class="work-request--information">
                   <div class="information-name">
-                    <input name="userPassword" type="password" required minlength="8" spellcheck="false">
+                    <input name="userPassword" type="text" required minlength="8" spellcheck="false">
                     <label for="password">Пароль</label>
                   </div>
                   <div class="information-email">
-                    <input name="userPasswordAgain" type="password" required minlength="8" spellcheck="false">
+                    <input name="userPasswordAgain" type="text" required minlength="8" spellcheck="false">
                     <label for="password">Повторите пароль</label>
                   </div>
                 </div>
+                <input type="submit" value="Отправить">
                 <a href="http://localhost:8010/register">
-                  <input type="button" value="Отправить">
+                  <input type="button" value="Получить токен">
                 </a>
               </form>
             </div>
