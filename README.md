@@ -10,14 +10,14 @@
 Если проблема с PostgreSQL, то нужно переместить create_db.sql на машину командой - `psql -U postgres postgres -h 127.0.0.1 < create_db.sql`
 Либо в Docker руками перекинуть в папку и проинициализировать командой - `psql -U postgres postgres < create_db.sql`
 
-Главная страница
+Главная страница http://localhost:8010/
 ![Alt text](prew/prew1.png?raw=true "Main")
 
-Страница отправки доната стримеру
+Страница отправки доната стримеру http://localhost:8010/donation
 ![Alt text](prew/prew2.png?raw=true "Donate")
 
 Страница API запроса для получения токена /api/{login}/{password}/mytoken
-![Alt text](prew/prew2.png?raw=true "Token")
+![Alt text](prew/prew3.png?raw=true "Token")
 
 Страница API запроса для получения списка донатов по токену стримера /api/{token}/donates
-![Alt text](prew/prew2.png?raw=true "List")
+![Alt text](prew/prew4.png?raw=true "List")
