@@ -89,12 +89,16 @@ func DonationHanler(w http.ResponseWriter, r *http.Request) {
 	d.Value, _ = strconv.Atoi(r.FormValue("Value"))
 	d.Text = r.FormValue("Text")
 
-	db.InsertDonate(db.Donate{
-		LoginStrimer: d.LoginStrimer,
-		NameSub:      d.NameSub,
-		Value:        d.Value,
-		Text:         d.Text,
-	})
+	login := db.FindUserNickname(d.LoginStrimer)
+
+	if login.Login == d.LoginStrimer {
+		db.InsertDonate(db.Donate{
+			LoginStrimer: d.LoginStrimer,
+			NameSub:      d.NameSub,
+			Value:        d.Value,
+			Text:         d.Text,
+		})
+	}
 }
 
 // API handlers
