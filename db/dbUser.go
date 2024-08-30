@@ -77,8 +77,8 @@ func InsertUser(u User) bool {
 	return true
 }
 
-// ListAllMessages if for returning all messages from the database table
-func ListAllMessages() []User {
+// ListAllUser if for returning all user from the database table
+func ListAllUser() []User {
 	db := ConnectPostgres()
 	if db == nil {
 		log.Println("Cannot connect to PostreSQL!")
