@@ -28,7 +28,7 @@ func (h NotAllowedHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // MethodNotAllowedHandler is executed when the HTTP method is incorrect
 func MethodNotAllowedHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Serving:", r.URL.Path, "from", r.Host, "with method")
-	Body := "Method not allowed!\n"
+	Body := "ERROR: METHOD NOT ALLOWED!\n"
 	fmt.Fprintf(w, "%s", Body)
 }
 
@@ -38,12 +38,7 @@ func init() {
 
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Main Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-	if r.URL.Path != "/" {
-		http.Redirect(w, r, "/error", http.StatusMethodNotAllowed)
-		return
-	} else {
-		w.WriteHeader(http.StatusOK)
-	}
+	w.WriteHeader(http.StatusOK)
 
 	err := tmpl.ExecuteTemplate(w, "index.html", nil)
 	if err != nil {
@@ -67,13 +62,7 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 
 func DonationHanler(w http.ResponseWriter, r *http.Request) {
 	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
-
-	if r.URL.Path != "/donation" {
-		http.Redirect(w, r, "/error", http.StatusMethodNotAllowed)
-		return
-	} else {
-		w.WriteHeader(http.StatusOK)
-	}
+	w.WriteHeader(http.StatusOK)
 
 	err := tmpl.ExecuteTemplate(w, "donation.html", nil)
 	if err != nil {
