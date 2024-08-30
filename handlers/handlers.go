@@ -92,7 +92,7 @@ func DonationHanler(w http.ResponseWriter, r *http.Request) {
 
 // API handlers
 func GetTokenHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("Donation Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
+	log.Println("GetToken Handler Serving:", r.URL.Path, "from", r.Host, "with method", r.Method)
 
 	login, ok := mux.Vars(r)["login"]
 	if !ok {
